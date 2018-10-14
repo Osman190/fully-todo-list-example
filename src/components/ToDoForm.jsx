@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 
 class ToDoForm extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
   textInput = React.createRef();
-  handleSubmit(e) {
+  handleSubmit = e => {
     e.preventDefault();
-    console.log(`Creat new item: ${this.textInput.current.value}`);
-  }
+    const text = this.textInput.current.value.trim();
+    this.props.addToDo(text);
+    e.currentTarget.reset();
+  };
 
   render() {
     return (
