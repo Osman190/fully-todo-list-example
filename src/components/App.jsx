@@ -2,12 +2,33 @@ import React, { Component } from "react";
 import Header from "./Header";
 import ToDoList from "./ToDoList";
 import ToDoForm from "./ToDoForm";
+import ToDoFilter from "./ToDoFilter";
 import uuid from "uuid/v4";
+import Storage from "../modules/Storage";
 
 class App extends Component {
-  state = {
-    itemsToDo: {}
-  };
+  constructor(props) {
+    super(props);
+
+    this.storageKey = "react-todo";
+    const old = Storage.get(this.storageKey);
+
+    if (old) {
+      this.state = JSON.parse(old);
+    } else {
+      this.state = {
+        itemsToDo: {},
+        filter: "undone"
+      };
+
+      Storage.set(this.storageKey, JSON.stringify(this.state));
+    }
+  }
+
+  componentDidUpdate() {
+    Storage.set(this.storageKey, JSON.stringify(this.state));
+  }
+
   addToDo = text => {
     const todo = {
       uuid: uuid(),
@@ -19,13 +40,47 @@ class App extends Component {
       return state;
     });
   };
+  updateToDoText = (uuid, text) => {
+    this.setState(state => {
+      state.itemsToDo[uuid].text = text;
+      return state;
+    });
+  };
+  toggleToDoDone = e => {
+    const checkbox = e.target;
+
+    this.setState(state => {
+      state.itemsToDo[checkbox.value].done = checkbox.checked;
+      return state;
+    });
+  };
+
+  removeToDo = uuid => {
+    this.setState(state => {
+      delete state.itemsToDo[uuid];
+      return state;
+    });
+  };
+  setFilter = filter => {
+    this.setState(state => {
+      state.filter = filter;
+      return state;
+    });
+  };
 
   render() {
     return (
       <div className="container">
         <Header tagline="Here are all the next tasks." />
         <ToDoForm addToDo={this.addToDo} />
-        <ToDoList items={this.state.itemsToDo} />
+        <ToDoFilter activeFilter={this.state.filter} setFilter={this.setFilter} />
+        <ToDoList
+          items={this.state.itemsToDo}
+          filter={this.state.filter}
+          updateToDoText={this.updateToDoText}
+          toggleToDoDone={this.toggleToDoDone}
+          removeToDo={this.removeToDo}
+        />
       </div>
     );
   }
