@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { updateToDoText, toggleToDo, removeToDo } from "../actions/index";
 
 class ToDoItem extends Component {
   render() {
@@ -13,7 +15,9 @@ class ToDoItem extends Component {
               id={`todo-done-${todo.uuid}`}
               type="checkbox"
               checked={todo.done}
-              onChange={this.props.toggleToDoDone}
+              onChange={e => {
+                this.props.toggleToDo(todo.uuid);
+              }}
             />
             <label className="custom-control-label" htmlFor={`todo-done-${todo.uuid}`}>
               &nbsp;
@@ -38,4 +42,11 @@ class ToDoItem extends Component {
   }
 }
 
-export default ToDoItem;
+export default connect(
+  state => ({}),
+  {
+    updateToDoText,
+    toggleToDo,
+    removeToDo
+  }
+)(ToDoItem);

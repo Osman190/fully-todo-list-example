@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { addToDo } from "../actions/index";
 
 class ToDoForm extends Component {
   textInput = React.createRef();
@@ -30,4 +32,9 @@ class ToDoForm extends Component {
   }
 }
 
-export default ToDoForm;
+export default connect(
+  state => ({}),
+  {
+    addToDo
+  }
+)(ToDoForm);
