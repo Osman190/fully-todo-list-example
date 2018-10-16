@@ -24,5 +24,5 @@ render(
   <Provider store={store}>
     <Router />
   </Provider>,
-  document.querySelector("#main")
+  document.querySelector("#root")
 );
