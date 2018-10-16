@@ -9,8 +9,8 @@ class App extends Component {
     return (
       <div className="container">
         <Header tagline="Here are all the next tasks." />
-        <ToDoForm } />
-        <ToDoFilter  />
+        <ToDoForm />
+        <ToDoFilter />
         <ToDoList />
       </div>
     );
